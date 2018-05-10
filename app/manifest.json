@@ -1,0 +1,32 @@
+{
+  "name": "Udacious Restaurants",
+  "short_name": "UD Restaurants",
+  "icons": [{
+    "src": "/build/public/images/cutlery.svg",
+      "sizes": "128x128",
+      "type": "svg"
+    }, {
+      "src": "/build/public/images/cutlery.svg",
+      "sizes": "144x144",
+      "type": "svg"
+    }, {
+      "src": "/build/public/images/cutlery.svg",
+      "sizes": "152x152",
+      "type": "svg"
+    }, {
+      "src": "/build/public/images/cutlery.svg",
+      "sizes": "192x192",
+      "type": "svg"
+    },
+    {
+      "src": "/build/public/images/cutlery.svg",
+      "sizes": "512x512",
+      "type": "svg"
+    }
+  ],
+  "start_url": "/index.html",
+  "gcm_sender_id": "103953800507",
+  "display": "standalone",
+  "background_color": "#FF9800",
+  "theme_color": "#1d2731"
+}
