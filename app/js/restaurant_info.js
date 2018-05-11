@@ -3,6 +3,7 @@ import DBHelper from './dbhelper';
 let restaurant;
 var map;
 
+
 /**
  * Initialize Google map, called from HTML.
  */
@@ -62,8 +63,6 @@ var fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.className = 'restaurant-img'
   image.alt = "Picture of restaurant: " + restaurant.name;
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-
-/*   lazyload(); */
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;

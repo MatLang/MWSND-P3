@@ -13,7 +13,7 @@ var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var mergeStream = require('merge-stream');
 var through = require('through2');
-var browserSync = require('browser-sync').create();
+/* var browserSync = require('browser-sync').create(); */
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var plumber = require('gulp-plumber');
@@ -38,6 +38,7 @@ var BUILD_PATH = 'build/public';
 var CSS_PATH = 'css/**/*.scss';
 var JS_PATH = 'js/**/*.js';
 var IMAGES_PATH = 'img/**/*.{png,jpeg,jpg,svg,gif}';
+var SW_PATH = 'sw.js';
 
 /* BUNDLE */
 
@@ -85,7 +86,7 @@ var jsBundles = {
     'js/dbhelper.js': createBundle('./js/dbhelper.js'),
     'js/main.js': createBundle('./js/main.js'),
     'js/restaurant_info.js': createBundle('./js/restaurant_info.js'),
-    /* 'sw.js': createBundle('./sw.js') */
+    'sw.js': createBundle('sw.js')
 };
 
 gulp.task('js:browser', function () {
@@ -153,5 +154,6 @@ gulp.task('watch', function () {
     livereload.listen();
     gulp.watch(IMAGES_PATH, ['images']);
     gulp.watch(JS_PATH, ['js:browser']);
+    gulp.watch(SW_PATH, ['js:browser']);
     gulp.watch(CSS_PATH, ['styles']);
 });

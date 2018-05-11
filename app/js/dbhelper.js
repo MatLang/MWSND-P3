@@ -7,9 +7,21 @@ var dbPromise;
 
 class DBHelper {
 
+  static openObjectStore = function(db, storeName, transactionMode) {
+    return db
+      .transaction(storeName, transactionMode)
+      .objectStore(storeName);
+  }
+
   static openDatabase() {
-    return idb.open('restaurants', 1, function (upgradeDb) {
-      upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
+    return idb.open('restaurants', 1, upgradeDB => {
+
+      switch (upgradeDB.oldVersion) {
+        case 0:
+        upgradeDB.createObjectStore('restaurants', { keyPath: 'id' });
+        case 1:
+        upgradeDB.createObjectStore('favqueue');
+      }
     });
   }
 

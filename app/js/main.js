@@ -4,7 +4,42 @@ let restaurants,
   neighborhoods,
   cuisines
 var map
-var markers = []
+var markers = [];
+
+let dbPromise = DBHelper.openDatabase();
+let openObjectStore = DBHelper.openObjectStore;
+
+/* window.toggleFavorite = (restaurantId) => {
+
+} */
+
+var triggerRequestQueueSync = function () {
+  console.log(self.navigator.serviceWorker);
+  navigator.serviceWorker.ready.then(function (swRegistration) {
+    console.log('success');
+    swRegistration.sync.register('favqueue');
+  });
+}
+
+window.toggleFavorite = function (subject) {
+  dbPromise.then(function (db) {
+    var restaurantStore = openObjectStore(db, 'restaurants', 'readonly')
+    return restaurantStore.get(subject);
+
+  }).then(restaurant => {
+    const isFavorite = !(restaurant.is_favorite == 'true');
+    restaurant.is_favorite = isFavorite.toString();
+    dbPromise.then(function (db) {
+      var restaurantStore = openObjectStore(db, 'restaurants', 'readwrite');
+      restaurantStore.put(restaurant);
+      var favStore = openObjectStore(db, 'favqueue', 'readwrite');
+      restaurant.url = `http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=${isFavorite}`;
+      restaurant.method = "put";
+      favStore.put(restaurant, restaurant.id);
+    })
+  })
+  triggerRequestQueueSync();
+};
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded. asd
@@ -21,7 +56,6 @@ var setEventListeners = () => {
   var neighborHoodSelect = document.getElementById('neighborhoods-select');
   neighborHoodSelect.addEventListener('change', function () {
     updateRestaurants();
-
   });
 
   var cuisineSelect = document.getElementById('cuisines-select');
@@ -178,9 +212,15 @@ var fillRestaurantsHTML = (restaurants = self.restaurants) => {
  * Create restaurant HTML.
  */
 var createRestaurantHTML = (restaurant, tabIndex) => {
+  const restaurantId = restaurant.id;
+
+  const isRestaurantFavorite = restaurant.is_favorite;
+
   const li = document.createElement('li');
 
   const picture = document.createElement('picture');
+
+  const favoriteButton = document.createElement('button');
 
   const image = document.createElement('img');
   image.className = 'restaurant-img lazy';
@@ -196,6 +236,14 @@ var createRestaurantHTML = (restaurant, tabIndex) => {
   const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   li.append(name);
+
+  const buttonText = document.createTextNode('Mark as favorite');
+  favoriteButton.appendChild(buttonText);
+  favoriteButton.setAttribute('onclick', 'window.toggleFavorite(' + restaurantId + ')');
+  favoriteButton.setAttribute('favorised', isRestaurantFavorite);
+  favoriteButton.id = 'favoriteButton'
+
+  li.append(favoriteButton);
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
