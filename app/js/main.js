@@ -14,9 +14,7 @@ let openObjectStore = DBHelper.openObjectStore;
 } */
 
 var triggerRequestQueueSync = function () {
-  console.log(self.navigator.serviceWorker);
   navigator.serviceWorker.ready.then(function (swRegistration) {
-    console.log('success');
     swRegistration.sync.register('favqueue');
   });
 }

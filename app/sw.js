@@ -76,22 +76,18 @@ self.addEventListener('fetch', event => {
 });
 
 self.addEventListener("sync", function (event) {
-  console.log('abc')
   if (event.tag === "favqueue") {
     event.waitUntil(function () {
-      console.log('running');
       return dbPromise.then(function (db) {
         var favStore = DBHelper.openObjectStore(db, 'favqueue', 'readonly')
         return favStore.getAll();
       }).then(function (requests) {
-        console.log('all requests', requests);
         return Promise.all(
           requests.map(function (req) {
             return fetch(req.url, {
               method: req.method
             }).then(function () {
               return dbPromise.then(function (db) {
-                console.log('Deleting');
                 openObjectStore(db, 'favqueue', 'readwrite').delete(req.id)
               })
             })
