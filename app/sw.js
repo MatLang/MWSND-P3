@@ -1,56 +1,50 @@
 import DBHelper from './js/dbhelper';
 import idb from 'idb';
 
-let dbPromise = DBHelper.openDatabase();
-/* var openObjectStore = function (db, storeName, transactionMode) {
-  return db
-    .transaction(storeName, transactionMode)
-    .objectStore(storeName);
-}
+const dbPromise = idb.open('restaurants', 1, upgradeDB => {
 
-var openDatabase = function () {
-  return idb.open('restaurants', 1, upgradeDB => {
+  switch (upgradeDB.oldVersion) {
+    case 0:
+      upgradeDB.createObjectStore('restaurants', { keyPath: 'id' });
+    case 1:
+      upgradeDB.createObjectStore('favqueue');
+  }
+});
 
-    switch (upgradeDB.oldVersion) {
-      case 0:
-        upgradeDB.createObjectStore('restaurants', { keyPath: 'id' });
-      case 1:
-        upgradeDB.createObjectStore('favqueue');
-    }
-  });
-} */
+
+/*  const dbPromise = DBHelper.openDatabase; */
 
 var CACHE_NAME = 'restaurant-cache';
 var urlsToCache = [
   '/',
   './index.html',
   './restaurant.html',
-  './build/public/css/styles.css',
-  './build/public/js/main.js',
-  './build/public/js/restaurant_info.js',
-  './build/public/js/dbhelper.js',
-  './build/public/images/1.jpg',
-  './build/public/images/2.jpg',
-  './build/public/images/3.jpg',
-  './build/public/images/4.jpg',
-  './build/public/images/5.jpg',
-  './build/public/images/6.jpg',
-  './build/public/images/7.jpg',
-  './build/public/images/8.jpg',
-  './build/public/images/9.jpg',
-  './build/public/images/10.jpg',
-  './build/public/images/1.webp',
-  './build/public/images/2.webp',
-  './build/public/images/3.webp',
-  './build/public/images/4.webp',
-  './build/public/images/5.webp',
-  './build/public/images/6.webp',
-  './build/public/images/7.webp',
-  './build/public/images/8.webp',
-  './build/public/images/9.webp',
-  './build/public/images/10.webp',
-  './build/public/images/cutlery.svg',
-  './manifest.json'
+  './css/styles.css',
+  './js/main.js',
+  './js/restaurant_info.js',
+  './js/dbhelper.js',
+  './images/1.jpg',
+  './images/2.jpg',
+  './images/3.jpg',
+  './images/4.jpg',
+  './images/5.jpg',
+  './images/6.jpg',
+  './images/7.jpg',
+  './images/8.jpg',
+  './images/9.jpg',
+  './images/10.jpg',
+  './images/1.webp',
+  './images/2.webp',
+  './images/3.webp',
+  './images/4.webp',
+  './images/5.webp',
+  './images/6.webp',
+  './images/7.webp',
+  './images/8.webp',
+  './images/9.webp',
+  './images/10.webp',
+  './images/cutlery.svg',
+  '../../manifest.json'
 ];
 
 self.addEventListener('install', function (event) {
@@ -75,25 +69,32 @@ self.addEventListener('fetch', event => {
   );
 });
 
-self.addEventListener("sync", function (event) {
-  if (event.tag === "favqueue") {
-    event.waitUntil(function () {
-      return dbPromise.then(function (db) {
-        var favStore = DBHelper.openObjectStore(db, 'favqueue', 'readonly')
-        return favStore.getAll();
-      }).then(function (requests) {
+self.addEventListener('sync', function (event) {
+  if (event.tag === 'favqueue') {
+    console.log('favqueue');
+    event.waitUntil(
+      dbPromise.then(db => {
+        console.log('in waituntil');
+        return db.transaction('favqueue')
+          .objectStore('favqueue').getAll()
+      }).then(messages => {
+        console.log('message', messages);
         return Promise.all(
-          requests.map(function (req) {
-            return fetch(req.url, {
-              method: req.method
-            }).then(function () {
-              return dbPromise.then(function (db) {
-                openObjectStore(db, 'favqueue', 'readwrite').delete(req.id)
+          messages.map((message) => {
+            console.log('fetching');
+            return fetch(message.url, {
+              method: message.method
+            }).then(() => {
+              return dbPromise.then(db => {
+                console.log('deleting');
+                const tx = db.transaction('favqueue', 'readwrite');
+                tx.objectStore('favqueue').delete(message.id);
+                return tx.complete;
               })
             })
           })
         )
-      })
-    })
+      }).catch(err => console.log(err))
+    )
   }
 })

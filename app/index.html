@@ -6,8 +6,8 @@
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <meta name=viewport content="width=device-width, initial-scale=1">
   <!-- Main CSS file -->
-  <link rel="stylesheet" href="build/public/css/styles.css" type="text/css">
-  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <link rel="manifest" href="../../manifest.json">
   <meta name="theme-color" content="#1d2731" />
   <!-- Lazyload -->
   <!-- <script async src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-beta.1/lazyload.js"></script> -->
@@ -48,7 +48,9 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('build/public/sw.js').then(function (registration) {
+        console.log(navigator.serviceWorker);
+        navigator.serviceWorker.register('/sw.js').then(function (registration) {
+
           console.log('ServiceWorker registration successful with scope: ', registration.scope);
         }, function (err) {
           console.log('ServiceWorker registration failed: ', err);
@@ -62,7 +64,7 @@
   <!-- test script import -->
 
   <!-- <script type="text/javascript" charset="utf-8" src="build/public/js/dbhelper.js"></script> -->
-  <script type="text/javascript" charset="utf-8" src="build/public/js/main.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/main.js"></script>
   <!--  -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDj5vmCjeCHhCTR_nfJs0kTYVUl6dGYUI0&libraries=places&callback=initMap"></script>
   <!-- Footer -->

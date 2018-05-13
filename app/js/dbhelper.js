@@ -7,26 +7,33 @@ var dbPromise;
 
 class DBHelper {
 
-  static openObjectStore = function(db, storeName, transactionMode) {
-    return db
-      .transaction(storeName, transactionMode)
-      .objectStore(storeName);
+  static openObjectStore = function (db, storeName, transactionMode = 'read') {
+    return db.transaction(storeName, transactionMode).objectStore(storeName);
   }
 
-  static openDatabase() {
-    return idb.open('restaurants', 1, upgradeDB => {
-
+  static openDatabase = function () {
+    return idb.open('restaurants', 1, function (upgradeDb) {
+      if (!upgradeDb.objectStoreNames.contains('restaurants')) {
+        upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
+      }
+      if (!upgradeDb.objectStoreNames.contains('favqueue')) {
+        upgradeDb.createObjectStore('favqueue');
+      }
+    })
+  }()
+  /*   static openDatabase = idb.open('restaurants', 1, upgradeDB => {
+  
       switch (upgradeDB.oldVersion) {
         case 0:
-        upgradeDB.createObjectStore('restaurants', { keyPath: 'id' });
+          upgradeDB.createObjectStore('restaurants', { keyPath: 'id' });
         case 1:
-        upgradeDB.createObjectStore('favqueue');
+          upgradeDB.createObjectStore('favqueue');
       }
-    });
-  }
+    }); */
+
 
   static getCachedMessages() {
-    dbPromise = this.openDatabase();
+    dbPromise = this.openDatabase;
     return dbPromise.then(function (db) {
 
       if (!db) return;
@@ -203,8 +210,8 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    if (restaurant.id == 10) return (`./build/public/images/10.webp`);
-    return (`./build/public/images/${restaurant.photograph}.webp`);
+    if (restaurant.id == 10) return (`images/10.webp`);
+    return (`images/${restaurant.photograph}.webp`);
   }
 
   /**

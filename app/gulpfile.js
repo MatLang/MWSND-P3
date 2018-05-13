@@ -39,6 +39,7 @@ var CSS_PATH = 'css/**/*.scss';
 var JS_PATH = 'js/**/*.js';
 var IMAGES_PATH = 'img/**/*.{png,jpeg,jpg,svg,gif}';
 var SW_PATH = 'sw.js';
+var HTML_PATH = '*.html';
 
 /* BUNDLE */
 
@@ -121,10 +122,11 @@ gulp.task('styles', function () {
 // Templates
 
 gulp.task('templates', function () {
-    return gulp.src('./**/*.html')
+    return gulp.src(HTML_PATH)
         .pipe(htmlmin({ collapseWhitespace: true }))
+        .pipe(gulp.dest('./build/public'))
         .pipe(gzip())
-        .pipe(gulp.dest('./'));
+        .pipe(gulp.dest('./build/public'));
 })
 
 // Images
@@ -156,4 +158,5 @@ gulp.task('watch', function () {
     gulp.watch(JS_PATH, ['js:browser']);
     gulp.watch(SW_PATH, ['js:browser']);
     gulp.watch(CSS_PATH, ['styles']);
+    gulp.watch(HTML_PATH, ['templates']);
 });

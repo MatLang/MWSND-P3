@@ -6,12 +6,9 @@ let restaurants,
 var map
 var markers = [];
 
-let dbPromise = DBHelper.openDatabase();
+let dbPromise = DBHelper.openDatabase;
 let openObjectStore = DBHelper.openObjectStore;
 
-/* window.toggleFavorite = (restaurantId) => {
-
-} */
 
 var triggerRequestQueueSync = function () {
   navigator.serviceWorker.ready.then(function (swRegistration) {
@@ -34,9 +31,11 @@ window.toggleFavorite = function (subject) {
       restaurant.url = `http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=${isFavorite}`;
       restaurant.method = "put";
       favStore.put(restaurant, restaurant.id);
+      restaurantStore.complete;
+      favStore.complete;
+      triggerRequestQueueSync();
     })
   })
-  triggerRequestQueueSync();
 };
 
 /**
