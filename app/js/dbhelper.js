@@ -3,11 +3,12 @@ import idb from 'idb';
 /**
  * Common database helper functions.
  */
+
 var dbPromise;
 
 class DBHelper {
 
-  static openObjectStore = function (db, storeName, transactionMode = 'read') {
+  static openObjectStore = (db, storeName, transactionMode = 'readonly') => {
     return db.transaction(storeName, transactionMode).objectStore(storeName);
   }
 
@@ -19,76 +20,65 @@ class DBHelper {
       if (!upgradeDb.objectStoreNames.contains('favqueue')) {
         upgradeDb.createObjectStore('favqueue');
       }
-    })
-  }()
-  /*   static openDatabase = idb.open('restaurants', 1, upgradeDB => {
-  
-      switch (upgradeDB.oldVersion) {
-        case 0:
-          upgradeDB.createObjectStore('restaurants', { keyPath: 'id' });
-        case 1:
-          upgradeDB.createObjectStore('favqueue');
+      if (!upgradeDb.objectStoreNames.contains('reviewqueue')) {
+        upgradeDb.createObjectStore('reviewqueue');
       }
-    }); */
+    })
+  }();
 
-
-  static getCachedMessages() {
+  /**
+     * Fetch all restaurants.
+     */
+  static getCachedMessages = function () {
     dbPromise = this.openDatabase;
     return dbPromise.then(function (db) {
 
       if (!db) return;
 
-      var tx = db.transaction('restaurants');
-      var store = tx.objectStore('restaurants');
+      return DBHelper.openObjectStore(db, 'restaurants').getAll();
 
-      return store.getAll();
-    });
-  }
-
-
-  /**
-   * Database URL.
-   * Change this to restaurants.json file location on your server.
-   */
-  static get DATABASE_URL() {
-    const port = 8000 // Change this to your server port
-    return `http://localhost:${port}/data/restaurants.json`;
+    })
   }
 
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    this.getCachedMessages().then(function (data) {
+    this.getCachedMessages().then((data) => {
       if (data.length > 0) {
         return callback(null, data);
       }
 
-      fetch('http://localhost:1337/restaurants', {
-        credentials: 'same-origin'
-      }).then(function (response) {
+      fetch('http://localhost:1337/restaurants').then((response) => {
         return response.json();
       }).then(restaurants => {
-        dbPromise.then(function (db) {
-          if (!db) return;
-          var tx = db.transaction('restaurants', 'readwrite');
-          var store = tx.objectStore('restaurants');
-
-          restaurants.forEach(restaurant => store.put(restaurant));
-
-          store.openCursor(null, 'prev').then(function (cursor) {
-            return cursor.advance(30);
-          }).then(function deleteRest(cursor) {
-            if (!cursor) return;
-            cursor.delete();
-            return cursor.continue().then(deleteRest);
-          });
-        })
-        return callback(null, restaurants);
+        return Promise.all(
+          restaurants.map((restaurant) => {
+            return fetch(`http://localhost:1337/reviews/?restaurant_id=${restaurant.id}`)
+              .then((response) => {
+                return response.json()
+              }).then((reviews) => {
+                restaurant.reviews = reviews;
+                return dbPromise.then((db) => {
+                  if (!db) return;
+                  var store = DBHelper.openObjectStore(db, 'restaurants', 'readwrite')
+                  restaurants.forEach(restaurant => store.put(restaurant));
+                  return store.openCursor(null, 'prev').then((cursor) => {
+                    return cursor.advance(30);
+                  }).then(function deleteRest(cursor) {
+                    if (!cursor) return;
+                    cursor.delete();
+                    return cursor.continue()
+                      .then(deleteRest);
+                  })
+                })
+              })
+          })
+        ).then((res) => {
+          return callback(null, restaurants);
+        });
       })
-    }).catch(err => {
-      callback(err, null);
-    });
+    })
   }
 
   /**

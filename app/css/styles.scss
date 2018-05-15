@@ -3,7 +3,6 @@
 $light-blue: #2B79A6;
 body,
 td,
-th,
 td,
 p {
     font-family: Arial, Helvetica, sans-serif;
@@ -12,11 +11,13 @@ p {
     word-wrap: break-word;
     font-size: 1em;
 }
+
 body {
     background-color: #1D2731;
     margin: 0;
     position: relative;
 }
+
 ul,
 li {
     margin-top: 0px;
@@ -41,23 +42,13 @@ a img {
 
 h1,
 h2,
-h3,
-h4,
-h5,
-h6 {
+h3 {
     display: flex;
     padding: 10px 10px 10px 0px;
 }
 
-article,
-aside,
-canvas,
-details,
-figcaption,
-figure,
 footer,
 header,
-hgroup,
 menu,
 nav,
 section {
@@ -70,6 +61,15 @@ section {
     margin-top: 15px;
     background-color: #f3f3f3;
     min-height: 100%;
+}
+
+#footer {
+    display: block;
+    background-color: #0b3c5d;
+    color: white;
+    padding: 25px;
+    text-align: center;
+    text-transform: uppercase;
 }
 
 /* ====================== Navigation ====================== */
@@ -116,6 +116,21 @@ nav {
         color: white;
         content: "/\00a0";
     }
+}
+
+li > button {
+    background-color: #1d2731;
+    padding: 10px;
+    color: white;
+    border: none;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+li p:last-of-type {
+    padding-bottom: 10px;
 }
 
 /* ====================== Map ====================== */
@@ -261,10 +276,6 @@ h2 {
 
 /* ====================== Media Queries ====================== */
 
-@media all and (min-width: 480px) {}
-
-@media all and (min-width: 839px) {}
-
 @media all and (min-width: 1024px) {
     #maincontent {
         display: grid;
@@ -278,6 +289,9 @@ h2 {
     }
     #reviews-container {
         grid-column: 1 / 3;
+    }
+    #add-reviews-container {
+        grid-column: 1 / 4;
     }
     #map {
         height: 100%;

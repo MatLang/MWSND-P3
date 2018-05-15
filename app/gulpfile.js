@@ -24,6 +24,7 @@ var minifyCss = require('gulp-minify-css');
 var critical = require('critical').stream;
 var htmlmin = require('gulp-htmlmin');
 var gzip = require('gulp-gzip');
+var cssnano = require('gulp-cssnano');
 
 // Image compression & conversion
 
@@ -113,8 +114,9 @@ gulp.task('styles', function () {
             outputStyle: 'compressed'
         }))
         .pipe(minifyCss())
+        .pipe(cssnano())
         .pipe(sourcemaps.write())
-        .pipe(gzip())
+/*         .pipe(gzip()) */
         .pipe(gulp.dest(BUILD_PATH + '/css'))
         .pipe(livereload());
 })

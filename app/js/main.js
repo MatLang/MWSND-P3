@@ -9,32 +9,44 @@ var markers = [];
 let dbPromise = DBHelper.openDatabase;
 let openObjectStore = DBHelper.openObjectStore;
 
-
-var triggerRequestQueueSync = function () {
+const triggerFavoriteRequestQueueSync = function () {
   navigator.serviceWorker.ready.then(function (swRegistration) {
     swRegistration.sync.register('favqueue');
   });
 }
 
-window.toggleFavorite = function (subject) {
+const toggleFavorite = function (event) {
+  const restaurantId = parseInt(this.getAttribute('restaurantId'));
+  const favoriteButton = document.getElementById(`favoriteButton${restaurantId}`);
+  const isFavorised = favoriteButton.hasAttribute('favorised');
+  const restaurantName = favoriteButton.getAttribute('restaurantname');
+  if (isFavorised) {
+    favoriteButton.removeAttribute('favorised');
+    favoriteButton.setAttribute('aria-label', `Mark ${restaurantName} as favorite`);
+    favoriteButton.innerHTML = 'Mark as favorite';
+  } else {
+    favoriteButton.setAttribute('favorised', '');
+    favoriteButton.setAttribute('aria-label', `Remove ${restaurantName} from favorites`);
+    favoriteButton.innerHTML = 'Remove from favorites';
+  }
   dbPromise.then(function (db) {
-    var restaurantStore = openObjectStore(db, 'restaurants', 'readonly')
-    return restaurantStore.get(subject);
-
+    var restaurantStore = DBHelper.openObjectStore(db, 'restaurants', 'readonly')
+    return restaurantStore.get(restaurantId);
   }).then(restaurant => {
     const isFavorite = !(restaurant.is_favorite == 'true');
     restaurant.is_favorite = isFavorite.toString();
-    dbPromise.then(function (db) {
+    return dbPromise.then(function (db) {
       var restaurantStore = openObjectStore(db, 'restaurants', 'readwrite');
-      restaurantStore.put(restaurant);
       var favStore = openObjectStore(db, 'favqueue', 'readwrite');
+      restaurantStore.put(restaurant);
       restaurant.url = `http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=${isFavorite}`;
       restaurant.method = "put";
       favStore.put(restaurant, restaurant.id);
       restaurantStore.complete;
-      favStore.complete;
-      triggerRequestQueueSync();
-    })
+      return favStore.complete
+    }).then(() => {
+      return triggerFavoriteRequestQueueSync()
+    }).catch((err) => console.log(err))
   })
 };
 
@@ -109,7 +121,7 @@ var fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById('cuisines-select');
 
   cuisines.forEach(cuisine => {
-    const option = document.createElement('li');
+    const option = document.createElement('option');
     option.innerHTML = cuisine;
     option.value = cuisine;
     select.append(option);
@@ -211,7 +223,7 @@ var fillRestaurantsHTML = (restaurants = self.restaurants) => {
 var createRestaurantHTML = (restaurant, tabIndex) => {
   const restaurantId = restaurant.id;
 
-  const isRestaurantFavorite = restaurant.is_favorite;
+  const isRestaurantFavorite = (restaurant.is_favorite == 'true');
 
   const li = document.createElement('li');
 
@@ -221,7 +233,7 @@ var createRestaurantHTML = (restaurant, tabIndex) => {
 
   const image = document.createElement('img');
   image.className = 'restaurant-img lazy';
-  image.tabIndex = 0;
+  /* image.tabIndex = 0; */
   let src = DBHelper.imageUrlForRestaurant(restaurant);
   image.setAttribute('src', '');
   image.setAttribute('data-src', src);
@@ -231,16 +243,26 @@ var createRestaurantHTML = (restaurant, tabIndex) => {
   li.append(picture);
 
   const name = document.createElement('h2');
+  name.setAttribute('tabIndex', 0);
   name.innerHTML = restaurant.name;
   li.append(name);
 
-  const buttonText = document.createTextNode('Mark as favorite');
-  favoriteButton.appendChild(buttonText);
-  favoriteButton.setAttribute('onclick', 'window.toggleFavorite(' + restaurantId + ')');
-  favoriteButton.setAttribute('favorised', isRestaurantFavorite);
-  favoriteButton.id = 'favoriteButton'
+  if (isRestaurantFavorite) {
+    favoriteButton.setAttribute('favorised', '');
+    favoriteButton.setAttribute('aria-label', `Remove ${restaurant.name} from favorites`);
+    favoriteButton.innerHTML = 'Remove from favorites';
+  } else {
+    favoriteButton.setAttribute('aria-label', `Mark ${restaurant.name} as favorite`);
+    favoriteButton.innerHTML = 'Mark as favorite';
+  }
 
-  li.append(favoriteButton);
+  favoriteButton.setAttribute('restaurantId', restaurantId);
+  favoriteButton.setAttribute('restaurantname', restaurant.name);
+  favoriteButton.id = `favoriteButton${restaurantId}`;
+  
+  
+
+  favoriteButton.addEventListener('click', toggleFavorite);
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
@@ -252,10 +274,12 @@ var createRestaurantHTML = (restaurant, tabIndex) => {
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
-  more.setAttribute('tabIndex', tabIndex.toString());
+  /* more.setAttribute('tabIndex', tabIndex.toString()); */
+  more.setAttribute('tabIndex', 0);
   more.setAttribute('aria-label', 'Details for' + restaurant.name);
   more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more)
+  li.append(more);
+  li.append(favoriteButton);
 
 
   return li

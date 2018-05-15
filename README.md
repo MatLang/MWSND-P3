@@ -4,13 +4,13 @@
 
 ## Project Overview: Stage 3
 
-For the **Restaurant Reviews** projects, this project converts a static webpage to a mobile-ready web application. In **Stage One**, it took a design that lacks accessibility and converted the design to be responsive on different sized displays and accessible for screen reader use. Furthermore, a service worker has been added to beginn the process of creating a seamless offline experience for any user. 
+For the **Restaurant Reviews** projects, this project converts a static webpage to a mobile-ready web application. In **Stage One**, it took a design that lacks accessibility and converted the design to be responsive on different sized displays and accessible for screen reader use. Furthermore, a service worker has been added to beginn the process of creating a seamless offline experience for any user. **Stage 3** wraps of the learning process of building PWA by implementing background sync and accessible form submission to the app.
 
 ### How to run?
 
-Navigate to root directory and start a local webserver. Python has some simple tools to do this, and you don't even need to know Python. For most people, it's already installed on your computer. 
+Install the local dependencies in the app/server directory with npm install.
 
-In a terminal, check the version of Python you have: `python -V`. If you have Python 2.x, spin up the server with `python -m SimpleHTTPServer 8000` (or some other port, if port 8000 is already in use.) For Python 3.x, you can use `python3 -m http.server 8000`. If you don't have Python installed, navigate to Python's [website](https://www.python.org/) to download and install the software.
+Next, navigate to server directory and start the backend server with `node server`. As soon as your backend server is running, navigate to the app directory and build the distribution files with `gulp watch`. This will also set up a local dev server on `localhost:8001'.
 
 ### Authors
 
@@ -22,7 +22,9 @@ Matthias Lang
 * [Matt Gaunt](https://developers.google.com/web/fundamentals/primers/service-workers/) for providing amazing tutorials on service workers
 * Props to all the amazing staff at Udacity
 * [jsoetens](https://github.com/jsoetens/udacity-nanodegree-mws/tree/master/mws-project-1)
-*[freepik](http.//www.freepik.com) and [flaticon.com](https://www.flaticon.com) for providing icons under the[creativecommons](http://creativecommons.org/licenses/by/3.0/) license
+* [freepik](http.//www.freepik.com) and [flaticon.com](https://www.flaticon.com) for providing icons under the[creativecommons](http://creativecommons.org/licenses/by/3.0/) license
+* [Tal Ater](https://github.com/TalAter) for providing amazing information in his book `Building Progressive Web Apps`
+* [Jeremy Wagner](https://github.com/malchata) for providing amazing information in his book `Web Performance In Action`
 
 
 

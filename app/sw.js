@@ -11,7 +11,6 @@ const dbPromise = idb.open('restaurants', 1, upgradeDB => {
   }
 });
 
-
 /*  const dbPromise = DBHelper.openDatabase; */
 
 var CACHE_NAME = 'restaurant-cache';
@@ -69,32 +68,68 @@ self.addEventListener('fetch', event => {
   );
 });
 
+/**
+   * Background sync restaurant reviews
+   */
+const syncReviews = function () {
+  return dbPromise.then(db => {
+    let reviewStore = DBHelper.openObjectStore(db, 'reviewqueue', 'readonly');
+    return reviewStore.getAll().then(reviews => {
+      return Promise.all(
+        reviews.map((review) => {
+          console.log(review)
+          return fetch('http://localhost:1337/reviews/', {
+            method: 'post',
+            body: JSON.stringify(review)
+          }).then((response) => {
+            const tx = db.transaction('reviewqueue', 'readwrite');
+            tx.objectStore('reviewqueue').delete(review.createdAt);
+            return tx.complete;
+          }).catch(err => {
+            console.log('err', err)
+          })
+        })
+      ).catch((err) => console.log(err))
+    })
+  }).catch((err) => console.log(err))
+}
+
+
+
+/**
+   * Background sync favorite restaurants
+   */
+const syncFavorites = function () {
+  dbPromise.then(db => {
+    return db.transaction('favqueue')
+      .objectStore('favqueue').getAll()
+  }).then(favorites => {
+    return Promise.all(
+      favorites.map((favorite) => {
+        return fetch(favorite.url, {
+          method: favorite.method
+        }).then((response) => {
+          return dbPromise.then(db => {
+            const tx = db.transaction('favqueue', 'readwrite');
+            tx.objectStore('favqueue').delete(favorite.id);
+            return tx.complete;
+          })
+        }).catch(res => {
+          console.log('res', res)
+        })
+      })
+    )
+  })
+}
+
 self.addEventListener('sync', function (event) {
   if (event.tag === 'favqueue') {
-    console.log('favqueue');
     event.waitUntil(
-      dbPromise.then(db => {
-        console.log('in waituntil');
-        return db.transaction('favqueue')
-          .objectStore('favqueue').getAll()
-      }).then(messages => {
-        console.log('message', messages);
-        return Promise.all(
-          messages.map((message) => {
-            console.log('fetching');
-            return fetch(message.url, {
-              method: message.method
-            }).then(() => {
-              return dbPromise.then(db => {
-                console.log('deleting');
-                const tx = db.transaction('favqueue', 'readwrite');
-                tx.objectStore('favqueue').delete(message.id);
-                return tx.complete;
-              })
-            })
-          })
-        )
-      }).catch(err => console.log(err))
+      syncFavorites()
+    )
+  } else if (event.tag === 'reviewqueue') {
+    event.waitUntil(
+      syncReviews()
     )
   }
 })
