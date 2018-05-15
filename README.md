@@ -4,7 +4,7 @@
 
 ## Project Overview: Stage 3
 
-For the **Restaurant Reviews** projects, this project converts a static webpage to a mobile-ready web application. In **Stage One**, it took a design that lacks accessibility and converted the design to be responsive on different sized displays and accessible for screen reader use. Furthermore, a service worker has been added to beginn the process of creating a seamless offline experience for any user. **Stage 3** wraps of the learning process of building PWA by implementing background sync and accessible form submission to the app.
+For the **Restaurant Reviews** projects, this project converts a static webpage to a mobile-ready web application. In **Stage One**, it took a design that lacks accessibility and converted the design to be responsive on different sized displays and accessible for screen reader use. Furthermore, a service worker has been added to beginn the process of creating a seamless offline experience for any user. **Stage 3** wraps of the learning process of building PWAs by implementing background sync and accessible form submission to the app.
 
 ### How to run?
 
