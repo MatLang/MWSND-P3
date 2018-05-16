@@ -8,9 +8,10 @@ For the **Restaurant Reviews** projects, this project converts a static webpage 
 
 ### How to run?
 
-Install the local dependencies in the app/server directory with npm install. Also make sure that GULP is properly installed on your system.
-
-Next, navigate to server directory and start the backend server with `node server`. As soon as your backend server is running, navigate to the app directory and build the distribution files with `gulp watch`. This will also set up a local dev server on `localhost:8001`.
+1. Please install GULP on your system
+2. In your terminal navigate to app and install local dependencies with `npm install`. Repeat for the server directory.
+3. Inside the server directory, start the backend server with `node server`.
+4. Inside the app directory, build the dist files with `gulp watch`. This will also set up a local dev server on `localhost:8001`.
 
 ### Authors
 
