@@ -131,6 +131,24 @@ var fillCuisinesHTML = (cuisines = self.cuisines) => {
 /**
  * Initialize Google map, called from HTML.
  */
+
+const checkDomMapContent = (map) => {
+  if (map instanceof HTMLElement) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+const initializeMap = (loc) => {
+  self.map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 12,
+    center: loc,
+    scrollwheel: false
+  })
+  return;
+}
+
 window.initMap = () => {
   let loc = {
     lat: 40.722216,
@@ -139,21 +157,25 @@ window.initMap = () => {
 
   const trigger = document.getElementById('toggle');
   trigger.addEventListener('click', function (event) {
-    const checked = this.getAttribute('aria-checked');
-    if (checked === 'false') {
-      console.log('test');
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 12,
-        center: loc,
-        scrollwheel: false
-      })
+    const map = self.map;
+    let isMapEmpty = checkDomMapContent(map);
+    /* console.log(this); */
+    let isChecked = this.getAttribute('aria-checked') === 'true';
+    //checked ? this.setAttribute('aria-checked', 'false') : this.setAttribute('aria-checked', 'true');
+    
+    if (!isChecked) {
+      this.setAttribute('aria-checked', 'true');
+    } else {
+      this.setAttribute('aria-checked', 'false');
+    }
+
+    if (!isChecked && isMapEmpty) {
+      initializeMap(loc);
+      addMarkersToMap(self.restaurants);
+    } else {
+      return;
     }
   })
-  /*   self.map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 12,
-      center: loc,
-      scrollwheel: false
-    }); */
   updateRestaurants();
 }
 
@@ -227,7 +249,6 @@ var fillRestaurantsHTML = (restaurants = self.restaurants) => {
   } else {
     // Possibly fall back to a more compatible method here
   }
-  addMarkersToMap();
 }
 
 /**
@@ -302,6 +323,8 @@ var createRestaurantHTML = (restaurant, tabIndex) => {
  * Add markers for current restaurants to the map.
  */
 var addMarkersToMap = (restaurants = self.restaurants) => {
+  console.log(typeof restaurants);
+  map = self.map;
   restaurants.forEach(restaurant => {
     // Add marker to the map
     const marker = DBHelper.mapMarkerForRestaurant(restaurant, map);

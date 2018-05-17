@@ -20,8 +20,10 @@
     </nav>
   </header>
   <main id="maincontent">
-    <input type="checkbox" id="toggle" aria-checked="false" tabindex="0" aria-lablledby="chk1-label">
-    <label id="chk1-label">Show Map Details</label>
+    <input type="checkbox" id="toggle" aria-checked="false" tabindex="0" aria-labelledby="chk1-label">
+    <label id="chk1-label">
+      <span>Show Map</span>
+    </label>
     <div id="expand">
       <section role="application" id="map-container">
         <div id="map"></div>
@@ -60,8 +62,7 @@
   </footer>
   <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjvpWUV4M4LMRyjlvXyRahM_rTyJP9tR8&libraries=places&callback=initMap"
     async defer></script> -->
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"
-    async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap" async defer></script>
 </body>
 
 </html>
