@@ -46,7 +46,6 @@ input#submit-button {
     border-radius: 4px;
     cursor: pointer;
     justify-content: center;
-    /*     float: left; */
     margin-top: 10px;
 }
 
@@ -115,11 +114,6 @@ section[role=application] {
     overflow: hidden;
 }
 
-/* .right-map {
-    height: 500px;
-    width: 100%;
-} */
-
 #map-container {
     background-color: #1d2731;
     padding: 0px 0px 0px 0px;
@@ -170,8 +164,8 @@ section[role=application] {
         background-color: #ccc;
         height: 100%;
         max-height: 100%;
-        /*         max-height: 550px; */
     }
+    
     #map-image {
         height: 100%;
         max-height: 100%;
@@ -185,6 +179,5 @@ section[role=application] {
     }
     #restaurant-container {
         grid-column: 1;
-        /* grid-row: 1; */
     }
 }
