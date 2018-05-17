@@ -120,6 +120,21 @@ var fetchRestaurantFromURL = (callback) => {
  * Create restaurant HTML and add it to the webpage
  */
 var fillRestaurantHTML = (restaurant = self.restaurant) => {
+/*   console.log('start');
+  console.log(restaurant.latlng);
+  const imageCenter = restaurant.latlng;
+  const restaurantLat = restaurant.latlng.lat;
+  const restaurantLng = restaurant.latlng.lng; */
+
+  /* const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${restaurantLat},${restaurantLng}&zoom=13&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C${restaurantLat},${restaurantLng}&key=AIzaSyCjvpWUV4M4LMRyjlvXyRahM_rTyJP9tR8`; */
+  // const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${restaurantLat},${restaurantLng}&zoom=13&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C${restaurantLat},${restaurantLng}`;
+/*   console.log(mapUrl); */
+
+  const mapContainer = document.getElementById('map');
+  const mapImage = document.createElement('img');
+/*   mapImage.src = mapUrl;
+  mapContainer.appendChild(mapImage); */
+
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
 

@@ -5,9 +5,9 @@
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <meta name=viewport content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/styles.css" type="text/css">
-  <link rel="stylesheet" href="css/review-styles.css" type="text/css">
-  <link rel="stylesheet" href="css/star_rating.css" type="text/css">
+  <link rel="stylesheet" href="css/styles.css" type="text/css" inline>
+  <link rel="stylesheet" href="css/review-styles.css" type="text/css" inline>
+  <link rel="stylesheet" href="css/star_rating.css" type="text/css" inline>
   <meta name="theme-color" content="#1d2731" />
   <title>Restaurant Info</title>
 </head>
@@ -40,7 +40,7 @@
       <ul id="reviews-list"></ul>
     </section>
     <section id="add-reviews-container" class="clearfix">
-      <form id="reviews-form" >
+      <form id="reviews-form">
         Please leave a review:
         <br>
         <textarea id="textarea" name="comments" aria-label="Please leave a review"></textarea>
@@ -72,7 +72,8 @@
     </a> All Rights Reserved.
   </footer>
   <script type="text/javascript" charset="utf-8" src="js/restaurant_info.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_tKbW6A5pQ-eupxI56myUnHLqYCzOjKo&libraries=places&callback=initMap"></script>
+  <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjvpWUV4M4LMRyjlvXyRahM_rTyJP9tR8&libraries=places&callback=initMap"></script> -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?&libraries=places&callback=initMap"></script>
 </body>
 
 </html>

@@ -5,7 +5,7 @@
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <meta name=viewport content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <link rel="stylesheet" href="css/styles.css" type="text/css" inline>
   <link rel="manifest" href="../../manifest.json">
   <meta name="theme-color" content="#1d2731" />
   <title>Restaurant Reviews</title>
@@ -20,9 +20,13 @@
     </nav>
   </header>
   <main id="maincontent">
-    <section role="application" id="map-container">
-      <div id="map"></div>
-    </section>
+    <input type="checkbox" id="toggle" aria-checked="false" tabindex="0" aria-lablledby="chk1-label">
+    <label id="chk1-label">Show Map Details</label>
+    <div id="expand">
+      <section role="application" id="map-container">
+        <div id="map"></div>
+      </section>
+    </div>
     <section id="left-container">
       <div tabindex="0" class="filter-options">
         <h2>Filter Results</h2>
@@ -54,7 +58,10 @@
       <strong>Restaurant Reviews</strong>
     </a> - All Rights Reserved.
   </footer>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDj5vmCjeCHhCTR_nfJs0kTYVUl6dGYUI0&libraries=places&callback=initMap" async defer></script>
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjvpWUV4M4LMRyjlvXyRahM_rTyJP9tR8&libraries=places&callback=initMap"
+    async defer></script> -->
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"
+    async defer></script>
 </body>
 
 </html>

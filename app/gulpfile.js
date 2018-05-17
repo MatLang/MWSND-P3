@@ -25,6 +25,8 @@ var critical = require('critical').stream;
 var htmlmin = require('gulp-htmlmin');
 var gzip = require('gulp-gzip');
 var cssnano = require('gulp-cssnano');
+/* var inlineCss = require('gulp-inline-css'); */
+var inlinesource = require('gulp-inline-source');
 
 // Image compression & conversion
 
@@ -116,20 +118,28 @@ gulp.task('styles', function () {
         .pipe(minifyCss())
         .pipe(cssnano())
         .pipe(sourcemaps.write())
-/*         .pipe(gzip()) */
+        /*         .pipe(gzip()) */
         .pipe(gulp.dest(BUILD_PATH + '/css'))
         .pipe(livereload());
 })
 
 // Templates
 
-gulp.task('templates', function () {
+gulp.task('build', function () {
     return gulp.src(HTML_PATH)
+        .pipe(gulp.dest('./build/public'))
+})
+
+gulp.task('inline-minify', ['build'], function () {
+    return gulp.src('build/public/*.html')
+        .pipe(inlinesource())
         .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(gulp.dest('./build/public'))
         .pipe(gzip())
         .pipe(gulp.dest('./build/public'));
 })
+
+gulp.task('templates', ['build', 'inline-minify']);
 
 // Images
 
