@@ -1,6 +1,5 @@
 @charset "utf-8";
 // color variables
-
 $light-blue: #2B79A6;
 body,
 td,
@@ -73,6 +72,29 @@ section {
     text-transform: uppercase;
 }
 
+/* ====================== Above MAP ====================== */
+
+#toggle {
+    margin: 0 auto;
+    display: block;
+    background-color: #0b3c5d;
+    /* Green */
+    border: none;
+    color: white;
+    padding: 8px 32px;
+    text-align: center;
+    text-decoration: none;
+    /* display: inline-block; */
+    font-family: Arial, sans-serif;
+    font-size: 14pt;
+    font-weight: 200;
+    width: 100%;
+}
+
+#toggle:hover {
+    text-decoration: underline;
+}
+
 /* ====================== Navigation ====================== */
 
 nav {
@@ -142,11 +164,11 @@ li p:last-of-type {
     transition: height 0.5s;
 }
 
-#toggle:checked~#expand {
+#toggle[checked]~#expand {
     height: 400px;
 }
 
-#map {
+.map {
     height: 400px;
     width: 100%;
 }
@@ -257,7 +279,7 @@ h2 {
 
 /* ====================== Restaurant Details ====================== */
 
-.inside #map {
+.inside .map {
     background-color: #ccc;
     min-height: 40vh;
 }

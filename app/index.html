@@ -20,13 +20,10 @@
     </nav>
   </header>
   <main id="maincontent">
-    <input type="checkbox" id="toggle" aria-checked="false" tabindex="0" aria-labelledby="chk1-label">
-    <label id="chk1-label">
-      <span>Show Map</span>
-    </label>
+    <button class="collapsible" id="toggle" tabindex="0" aria-label="Open map">Open map</button> 
     <div id="expand">
       <section role="application" id="map-container">
-        <div id="map"></div>
+        <div id="map" class="map"></div>
       </section>
     </div>
     <section id="left-container">

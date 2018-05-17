@@ -26,9 +26,15 @@
     </ul>
   </header>
   <main id="maincontent">
-    <section role="application" id="map-container">
+    <div id="map-container">
+      <button class="collapsible" id="toggle" tabindex="0" aria-label="Open map">Open Map</button>
+      <section role="application" id="expand">
+        <div id="map" class="right-map"></div>
+      </section>
+    </div>
+    <!--     <section role="application" id="map-container">
       <div id="map"></div>
-    </section>
+    </section> -->
     <section tabindex="0" id="restaurant-container">
       <h2 id="restaurant-name"></h2>
       <img id="restaurant-img">

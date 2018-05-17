@@ -10,7 +10,6 @@ const triggerReviewRequestQueueSync = function () {
 }
 
 function submitReview(body) {
-  console.log('triggering');
   return DBHelper.openDatabase
     .then(db => {
       let restaurantStore = DBHelper.openObjectStore(db, 'restaurants', 'readonly');
@@ -40,16 +39,18 @@ function submitReview(body) {
 
 const submitButton = document.getElementById('submit-button');
 submitButton.addEventListener('click', function () {
-  console.log('triggering');
   const form = document.getElementById("reviews-form");
   let reviewerName = document.getElementById('reviewer-name').value;
   const comment = form.textarea.value;
   const ratings = document.querySelectorAll('input[type="radio"]');
   const restaurantId = window.location.href.split('=')[1];
   let rating = 0;
+  let ratingId;
   for (var item of ratings) {
     if (item.checked == true) {
+      ratingId = item.id;
       rating = item.value;
+      item.checked = false;
       break;
     }
   }
@@ -62,6 +63,7 @@ submitButton.addEventListener('click', function () {
     'createdAt': Date.now(),
     'updatedAt': Date.now()
   }
+
   form.textarea.value = '';
   document.getElementById('reviewer-name').value = '';
 
@@ -79,13 +81,13 @@ window.initMap = () => {
     if (error) { // Got an error!
       console.error('error', error);
     } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
+      /* self.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 16,
         center: restaurant.latlng,
         scrollwheel: false
-      });
+      }); */
       fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+      /* DBHelper.mapMarkerForRestaurant(self.restaurant, self.map); */
     }
   });
 }
@@ -94,13 +96,12 @@ window.initMap = () => {
  * Get current restaurant from page URL.
  */
 var fetchRestaurantFromURL = (callback) => {
-  if (self.restaurant) { // restaurant already fetched!
-    console.log('already fetched');
+  if (self.restaurant) {
     callback(null, self.restaurant)
     return;
   }
   const id = getParameterByName('id');
-  if (!id) { // no id found in URL
+  if (!id) { 
     error = 'No restaurant id in URL'
     callback(error, null);
   } else {
@@ -120,20 +121,17 @@ var fetchRestaurantFromURL = (callback) => {
  * Create restaurant HTML and add it to the webpage
  */
 var fillRestaurantHTML = (restaurant = self.restaurant) => {
-/*   console.log('start');
-  console.log(restaurant.latlng);
   const imageCenter = restaurant.latlng;
   const restaurantLat = restaurant.latlng.lat;
-  const restaurantLng = restaurant.latlng.lng; */
+  const restaurantLng = restaurant.latlng.lng;
 
-  /* const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${restaurantLat},${restaurantLng}&zoom=13&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C${restaurantLat},${restaurantLng}&key=AIzaSyCjvpWUV4M4LMRyjlvXyRahM_rTyJP9tR8`; */
-  // const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${restaurantLat},${restaurantLng}&zoom=13&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C${restaurantLat},${restaurantLng}`;
-/*   console.log(mapUrl); */
+  const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${restaurantLat},${restaurantLng}&zoom=13&size=1000x700&maptype=roadmap&markers=color:red%7Clabel:C%7C${restaurantLat},${restaurantLng}&key=AIzaSyDVxFd5ZApqxb_0P4jR0gHRBRnwyipiZSI`;
 
   const mapContainer = document.getElementById('map');
   const mapImage = document.createElement('img');
-/*   mapImage.src = mapUrl;
-  mapContainer.appendChild(mapImage); */
+  mapImage.src = mapUrl;
+  mapImage.id = 'map-image'
+  mapContainer.appendChild(mapImage);
 
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
@@ -258,3 +256,31 @@ var getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+// Map toggle button
+
+const checkDomMapContent = (map) => {
+  if (map instanceof HTMLElement) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+const trigger = document.getElementById('toggle');
+trigger.addEventListener('click', function (event) {
+  const map = self.map;
+  let isMapEmpty = checkDomMapContent(map);
+  let isChecked = this.hasAttribute('checked');
+
+  if (!isChecked) {
+    this.setAttribute('checked', '');
+    this.setAttribute('aria-label', 'Hide Map');
+    this.innerHTML = 'Hide Map';
+  } else {
+    this.removeAttribute('checked');
+    this.innerHTML = 'Open Map';
+    this.setAttribute('aria-label', 'Open Map');
+  }
+  return;
+})

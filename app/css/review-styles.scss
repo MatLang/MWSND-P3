@@ -11,6 +11,10 @@ form {
     padding: 0 15px 15px;
 }
 
+.map {
+    display: block;
+}
+
 input#reviewer-name {
     width: 100%;
     padding: 5px;
@@ -89,6 +93,55 @@ input#submit-button {
     }
 }
 
+section[role=application] {
+    size: 500px;
+    height: 500px;
+}
+
+/* ====================== Map ====================== */
+
+#expand {
+    height: 0px;
+    overflow: hidden;
+    transition: height 0.5s;
+}
+
+#toggle[checked]~#expand {
+    height: 100%;
+    overflow: hidden;
+}
+
+#toggle {
+    overflow: hidden;
+}
+
+/* .right-map {
+    height: 500px;
+    width: 100%;
+} */
+
+#map-container {
+    background-color: #1d2731;
+    padding: 0px 0px 0px 0px;
+    overflow: hidden;
+}
+
+#map-image {
+    height: 100%;
+    min-height: 529px;
+    max-width: 100%;
+    max-height: 550px;
+    width: 100%;
+    object-fit: cover;
+    box-sizing: border-box;
+}
+
+#map {
+    width: 100%;
+}
+
+/* ================================================ */
+
 #restaurant-cuisine {
     background-color: #1d2731;
     color: white;
@@ -100,7 +153,6 @@ input#submit-button {
 @media all and (min-width: 1024px) {
     #maincontent {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
         grid-template-columns: 1fr 1fr;
     }
     #map-container {
@@ -114,9 +166,15 @@ input#submit-button {
     #add-reviews-container {
         grid-column: 1 / 4;
     }
-    #map {
-        height: 100%;
+    .right-map {
         background-color: #ccc;
+        height: 100%;
+        max-height: 100%;
+        /*         max-height: 550px; */
+    }
+    #map-image {
+        height: 100%;
+        max-height: 100%;
     }
     #restaurants-list li {
         width: 230px;
@@ -124,5 +182,9 @@ input#submit-button {
     #left-container {
         background-color: #1D2731;
         padding-left: 15px;
+    }
+    #restaurant-container {
+        grid-column: 1;
+        /* grid-row: 1; */
     }
 }

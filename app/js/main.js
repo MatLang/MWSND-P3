@@ -159,14 +159,16 @@ window.initMap = () => {
   trigger.addEventListener('click', function (event) {
     const map = self.map;
     let isMapEmpty = checkDomMapContent(map);
-    /* console.log(this); */
-    let isChecked = this.getAttribute('aria-checked') === 'true';
-    //checked ? this.setAttribute('aria-checked', 'false') : this.setAttribute('aria-checked', 'true');
+    let isChecked = this.hasAttribute('checked');
     
     if (!isChecked) {
-      this.setAttribute('aria-checked', 'true');
+      this.setAttribute('checked', '');
+      this.setAttribute('aria-label', 'Hide Map');
+      this.innerHTML = 'Hide Map';
     } else {
-      this.setAttribute('aria-checked', 'false');
+      this.removeAttribute('checked');
+      this.setAttribute('aria-label', 'Open Map');
+      this.innerHTML = 'Open Map';
     }
 
     if (!isChecked && isMapEmpty) {

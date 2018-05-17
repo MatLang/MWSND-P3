@@ -19,6 +19,8 @@ var urlsToCache = [
   './index.html',
   './restaurant.html',
   './css/styles.css',
+  './css/star_rating.css',
+  './css/review-styles.css',
   './js/main.js',
   './js/restaurant_info.js',
   './js/dbhelper.js',
@@ -59,14 +61,14 @@ self.addEventListener('activate', event => {
   event.waitUntil(self.clients.claim());
 });
 
-/* self.addEventListener('fetch', event => {
+self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request, { ignoreSearch: true }).then(response => {
       return response || fetch(event.request);
     })
       .catch(err => console.log(err, event.request))
   );
-}); */
+});
 
 /**
    * Background sync restaurant reviews
@@ -77,7 +79,6 @@ const syncReviews = function () {
     return reviewStore.getAll().then(reviews => {
       return Promise.all(
         reviews.map((review) => {
-          console.log(review)
           return fetch('http://localhost:1337/reviews/', {
             method: 'post',
             body: JSON.stringify(review)

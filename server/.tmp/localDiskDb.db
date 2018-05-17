@@ -21,9 +21,9 @@
           "Sunday": "12:00 pm - 4:00 pm, 5:30 pm - 11:00 pm"
         },
         "createdAt": 1504095563444,
-        "updatedAt": "2018-05-15T16:02:58.272Z",
+        "updatedAt": "2018-05-17T21:31:43.293Z",
         "id": 1,
-        "is_favorite": "true"
+        "is_favorite": "false"
       },
       {
         "name": "Emily",
@@ -45,7 +45,7 @@
           "Sunday": "12:00 pm - 3:00 pm, 5:00 pm - 11:00 pm"
         },
         "createdAt": 1504095568414,
-        "updatedAt": "2018-05-15T14:23:27.198Z",
+        "updatedAt": "2018-05-17T21:26:30.783Z",
         "is_favorite": "false",
         "id": 2
       },
@@ -69,7 +69,7 @@
           "Sunday": "11:30 am - 2:00 am"
         },
         "createdAt": 1504095571434,
-        "updatedAt": "2018-05-14T19:16:44.555Z",
+        "updatedAt": "2018-05-17T21:28:15.275Z",
         "id": 3,
         "is_favorite": "true"
       },
@@ -451,93 +451,12 @@
       },
       {
         "restaurant_id": "1",
-        "name": "adf",
-        "rating": "5",
-        "comments": "asdada",
-        "createdAt": 1526322907829,
-        "updatedAt": 1526322907829,
-        "id": 36
-      },
-      {
-        "restaurant_id": "1",
-        "name": "adf",
-        "rating": "5",
-        "comments": "asdasd",
-        "createdAt": 1526323021246,
-        "updatedAt": 1526323021246,
-        "id": 37
-      },
-      {
-        "restaurant_id": "1",
-        "name": "adf",
-        "rating": "5",
-        "comments": "asd",
-        "createdAt": 1526323036156,
-        "updatedAt": 1526323036156,
-        "id": 38
-      },
-      {
-        "restaurant_id": "2",
-        "name": "adf",
-        "rating": "5",
-        "comments": "asd",
-        "createdAt": 1526323159277,
-        "updatedAt": 1526323159277,
-        "id": 39
-      },
-      {
-        "restaurant_id": "1",
-        "name": "adf",
-        "rating": "5",
-        "comments": "asdadsa",
-        "createdAt": 1526324499281,
-        "updatedAt": 1526324499281,
-        "id": 40
-      },
-      {
-        "restaurant_id": "1",
-        "name": "adf",
-        "rating": "4",
-        "comments": "asdadad",
-        "createdAt": 1526324594667,
-        "updatedAt": 1526324594667,
-        "id": 41
-      },
-      {
-        "restaurant_id": "9",
         "name": "Matt",
         "rating": "5",
         "comments": "Super restaurant",
-        "createdAt": 1526399200366,
-        "updatedAt": 1526399200366,
-        "id": 42
-      },
-      {
-        "restaurant_id": "1",
-        "name": "Matt",
-        "rating": "5",
-        "comments": "adssadsda",
-        "createdAt": 1526400187404,
-        "updatedAt": 1526400187404,
-        "id": 43
-      },
-      {
-        "restaurant_id": "1",
-        "name": "",
-        "rating": 0,
-        "comments": "asdad",
-        "createdAt": 1526400290839,
-        "updatedAt": 1526400290839,
-        "id": 44
-      },
-      {
-        "restaurant_id": "1",
-        "name": "Test123",
-        "rating": "5",
-        "comments": "Test123",
-        "createdAt": 1526400841371,
-        "updatedAt": 1526400841372,
-        "id": 45
+        "createdAt": 1526589412277,
+        "updatedAt": 1526589412277,
+        "id": 47
       }
     ]
   },
@@ -593,7 +512,7 @@
       "id": 10
     },
     "reviews": {
-      "id": 45
+      "id": 47
     }
   }
 }
